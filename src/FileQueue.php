@@ -87,7 +87,7 @@ class FileQueue extends Queue implements QueueQueue, ClearableQueue
         }
     }
 
-    public function clear($queue)
+    public function clear($queue): int
     {
         $num = 0;
         foreach ($this->getEntries($queue) as $entry) {
