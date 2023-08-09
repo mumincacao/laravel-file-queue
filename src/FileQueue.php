@@ -6,6 +6,7 @@ namespace Mumincacao\LaravelFileQueue;
 
 use DateInterval;
 use DateTimeInterface;
+use Illuminate\Contracts\Queue\ClearableQueue;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Contracts\Queue\Queue as QueueQueue;
 use Illuminate\Queue\Queue;
@@ -13,7 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use RuntimeException;
 
-class FileQueue extends Queue implements QueueQueue
+class FileQueue extends Queue implements QueueQueue, ClearableQueue
 {
     protected readonly string $path;
 
@@ -86,11 +87,14 @@ class FileQueue extends Queue implements QueueQueue
         }
     }
 
-    public function clear(?string $queue = null): void
+    public function clear($queue)
     {
+        $num = 0;
         foreach ($this->getEntries($queue) as $entry) {
             unlink($entry);
+            $num++;
         }
+        return $num;
     }
 
     protected function getQueueName(?string $queue = null): string

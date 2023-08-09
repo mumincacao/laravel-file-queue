@@ -45,7 +45,7 @@ class QueueTest extends TestCase
     public function testFileQueue(): void
     {
         $queue = $this->getFileQueue();
-        $queue->clear();
+        $queue->clear('default');
         $queue->clear('sub');
         $this->assertEquals($queue->size(), 0, 'Initial (default)');
         $this->assertEquals($queue->size('sub'), 0, 'Initial (sub)');
@@ -72,7 +72,7 @@ class QueueTest extends TestCase
     public function testDelay(): void
     {
         $queue = $this->getFileQueue();
-        $queue->clear();
+        $queue->clear('default');
         $this->assertEquals($queue->size(), 0, 'Initial');
 
         Carbon::setTestNow('2023-01-01 00:00:00');
