@@ -74,7 +74,8 @@ class FileQueue extends Queue implements QueueQueue, ClearableQueue
         if ($time > $this->currentTime()) {
             return null;
         }
-        throw_unless($payload = file_get_contents($entry));
+        $payload = file_get_contents($entry);
+        throw_if($payload === false);
         $this->delete($queue, $uuid);
         return new FileJob($this->container, $this, $payload, $queue);
     }
