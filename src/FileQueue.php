@@ -82,7 +82,7 @@ class FileQueue extends Queue implements QueueQueue, ClearableQueue
     public function delete(string $queue, string $uuid): void
     {
         $entry = $this->getFirstEntry($queue, $uuid);
-        if (file_exists($entry)) {
+        if (is_string($entry) && file_exists($entry)) {
             unlink($entry);
         }
     }

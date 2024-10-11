@@ -67,6 +67,9 @@ class QueueTest extends TestCase
         $this->assertEquals($queue->size(), 0, 'Pushed (default)');
         $this->assertEquals($queue->size('sub'), 0, 'Pushed (sub)');
         $this->assertEquals($subJob->message, 'Sub Job', 'Job payload');
+
+        $this->assertNull($queue->pop(), 'Empty pop (default)');
+        $this->assertNull($queue->pop('sub'), 'Empty pop (sub)');
     }
 
     public function testDelay(): void
@@ -96,5 +99,13 @@ class QueueTest extends TestCase
         $this->assertEquals($dayJob->message, 'Tomorrow');
         $this->assertNull($queue->pop());
         $this->assertEquals($queue->size(), 0, 'Poped day again');
+    }
+
+    public function testDeleteMissingJob(): void
+    {
+        $queue = $this->getFileQueue();
+        $queue->clear('default');
+        $queue->delete('default', 'dummy');
+        $this->assertEquals($queue->size('default'), 0);
     }
 }
