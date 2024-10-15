@@ -108,4 +108,14 @@ class QueueTest extends TestCase
         $queue->delete('default', 'dummy');
         $this->assertEquals($queue->size('default'), 0);
     }
+
+    public function testDeletedFlag(): void
+    {
+        $queue = $this->getFileQueue();
+        $queue->clear('default');
+        TestJob::dispatch('Deleted flag test');
+        $job = $queue->pop('default');
+        $this->assertTrue($job->isDeleted(), 'Is deleted');
+        $this->assertTrue($job->isDeletedOrReleased(), 'Is deleted or released');
+    }
 }
