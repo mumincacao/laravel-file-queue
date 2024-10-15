@@ -39,6 +39,7 @@ class QueueTest extends TestCase
         if (!$job instanceof FileJob) {
             return null;
         }
+        $job->fire();
         return unserialize(Arr::get($job->payload(), 'data.command'));
     }
 

@@ -76,9 +76,7 @@ class FileQueue extends Queue implements QueueQueue, ClearableQueue
         }
         $payload = file_get_contents($entry);
         throw_if($payload === false);
-        $job = new FileJob($this->container, $this, $payload, $queue);
-        $job->delete();
-        return $job;
+        return new FileJob($this->container, $this, $payload, $queue);
     }
 
     public function delete(string $queue, string $uuid): void
