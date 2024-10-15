@@ -70,14 +70,15 @@ class FileQueue extends Queue implements QueueQueue, ClearableQueue
         if ($entry === null) {
             return null;
         }
-        [$time, $uuid] = explode('_', basename($entry));
+        $time = Str::before(basename($entry), '_');
         if ($time > $this->currentTime()) {
             return null;
         }
         $payload = file_get_contents($entry);
         throw_if($payload === false);
-        $this->delete($queue, $uuid);
-        return new FileJob($this->container, $this, $payload, $queue);
+        $job = new FileJob($this->container, $this, $payload, $queue);
+        $job->delete();
+        return $job;
     }
 
     public function delete(string $queue, string $uuid): void
